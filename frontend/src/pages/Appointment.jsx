@@ -26,8 +26,8 @@ const Appointment = () => {
 
   const getAvailableSlots = async () => {
     if (!docInfo) {
-    return;
-  }
+      return;
+    }
     setDocSlots([]);
 
     // getting current date
@@ -46,13 +46,33 @@ const Appointment = () => {
 
       // setting hours
       if (today.getDate() === currentDate.getDate()) {
-        currentDate.setHours(
-          currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10
-        );
-        currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
+        // Lógica de redondeo de hora (NUEVA)
+        const currentMinutes = currentDate.getMinutes();
+
+        if (currentMinutes < 30) {
+          // Si son 10:01 - 10:29, el primer slot es 10:30
+          currentDate.setMinutes(30);
+        } else {
+          // Si son 10:30 - 10:59, el primer slot es 11:00
+          currentDate.setHours(currentDate.getHours() + 1);
+          currentDate.setMinutes(0);
+        }
+
+        // Limpiar segundos y milisegundos
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
+
+        // Asegurarse de que no empiece antes de las 10:00
+        if (currentDate.getHours() < 10) {
+          currentDate.setHours(10);
+          currentDate.setMinutes(0);
+        }
       } else {
+        // Para días futuros, empezar a las 10:00
         currentDate.setHours(10);
         currentDate.setMinutes(0);
+        currentDate.setSeconds(0);
+        currentDate.setMilliseconds(0);
       }
 
       let timeSlots = [];
@@ -97,10 +117,10 @@ const Appointment = () => {
       toast.warn("Por favor inicia sesión para reservar una cita");
       return navigate("/login");
     }
-    if (!slotTime) { 
-    toast.error("Por favor, selecciona una hora para la cita.");
-    return; 
-  }
+    if (!slotTime) {
+      toast.error("Por favor, selecciona una hora para la cita.");
+      return;
+    }
 
     try {
       const date = docSlots[slotIndex][0].datetime;
