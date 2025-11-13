@@ -72,11 +72,11 @@ const AdminContextProvider = (props) => {
       const { data } = await axios.post(
         backendUrl + "/api/admin/cancel-appointment",
         { appointmentId },
-        { headers: { aToken } } 
+        { headers: { aToken } }
       );
       if (data.success) {
         toast.success(data.message);
-        getAllAppointments(); 
+        getAllAppointments();
       } else {
         toast.error(data.message);
       }
@@ -84,34 +84,14 @@ const AdminContextProvider = (props) => {
       toast.error(error.message);
     }
   };
-
 
   const adminCompleteAppointment = async (appointmentId) => {
     try {
       const { data } = await axios.post(
         backendUrl + "/api/admin/complete-appointment",
         { appointmentId },
-        { headers: { aToken } } 
-      );
-      if (data.success) {
-        toast.success(data.message);
-        getAllAppointments(); 
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const cancelAppointment = async (appointmentId) => {
-    try {
-      const { data } = await axios.post(
-        backendUrl + "/api/admin/cancel-appointment",
-        { appointmentId },
         { headers: { aToken } }
       );
-
       if (data.success) {
         toast.success(data.message);
         getAllAppointments();
@@ -150,7 +130,6 @@ const AdminContextProvider = (props) => {
     appointments,
     setAppointments,
     getAllAppointments,
-    cancelAppointment,
     dashData,
     getDashData,
     adminCancelAppointment,
