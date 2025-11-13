@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
 
-const changeAvailablity = async (req, res) => {
+const changeAvailability = async (req, res) => {
   try {
     const docId = req.docId;
 
@@ -190,7 +190,7 @@ const updateDoctorProfile = async (req, res) => {
 };
 
 export {
-  changeAvailablity,
+  changeAvailability,
   doctorList,
   loginDoctor,
   appointmentsDoctor,
