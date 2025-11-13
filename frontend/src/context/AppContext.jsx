@@ -44,6 +44,27 @@ const AppContextProvider = (props) => {
     }
   };
 
+  const months = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic",
+  ];
+  const slotDateFormat = (slotDate) => {
+    const dateArray = slotDate.split("_");
+    return (
+      dateArray[0] + " " + months[Number(dateArray[1]) - 1] + " " + dateArray[2]
+    );
+  };
+
   const value = {
     doctors,
     getDoctorsData,
@@ -54,6 +75,7 @@ const AppContextProvider = (props) => {
     userData,
     setUserData,
     loadUserProfileData,
+    slotDateFormat,
   };
 
   useEffect(() => {
