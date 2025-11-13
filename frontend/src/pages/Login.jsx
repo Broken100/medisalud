@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
-import axios from 'axios'
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-
-  const {backendUrl, token, setToken} = useContext(AppContext);
+  const { backendUrl, token, setToken } = useContext(AppContext);
   const navigate = useNavigate();
 
   const [state, setState] = useState("Registrarse");
@@ -19,38 +18,40 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      
-      if (state === 'Registrarse') {
-        
-        const {data} = await axios.post(backendUrl + '/api/user/register', {name, password, email})
+      if (state === "Registrarse") {
+        const { data } = await axios.post(backendUrl + "/api/user/register", {
+          name,
+          password,
+          email,
+        });
         if (data.success) {
-          localStorage.setItem('token', data.token)
-          setToken(data.token)
+          localStorage.setItem("token", data.token);
+          setToken(data.token);
         } else {
-          toast.error(data.message)
+          toast.error(data.message);
         }
-
       } else {
-        const {data} = await axios.post(backendUrl + '/api/user/login', {password, email})
+        const { data } = await axios.post(backendUrl + "/api/user/login", {
+          password,
+          email,
+        });
         if (data.success) {
-          localStorage.setItem('token', data.token)
-          setToken(data.token)
+          localStorage.setItem("token", data.token);
+          setToken(data.token);
         } else {
-          toast.error(data.message)
+          toast.error(data.message);
         }
-
       }
-
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.message);
     }
   };
 
-  useEffect (() => {
+  useEffect(() => {
     if (token) {
-      navigate('/')
+      navigate("/");
     }
-  },[token])
+  }, [token]);
 
   return (
     <form onSubmit={onSubmitHandler} className="min-h-[80vh] flex items-center">
@@ -95,18 +96,38 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-primary text-white w-full py-2 rounded-md text-base">
+        <button
+          type="submit"
+          className="bg-primary text-white w-full py-2 rounded-md text-base"
+        >
           {state === "Registrarse" ? "Crear Cuenta" : "Iniciar Sesión"}
         </button>
         {state === "Registrarse" ? (
           <p>
             ¿Ya tienes una cuenta?{" "}
-            <span
-              onClick={() => setState("Crear")}
-              className="text-primary underline cursor-pointer"
-            >
-              Inicia sesión aquí
-            </span>
+            {state === "Registrarse" ? (
+              <p>
+                 ¿Ya tienes una cuenta? {" "}
+                <span
+                  onClick={() => setState("Iniciar Sesión")} 
+                  className="text-primary underline cursor-pointer"
+                >
+                 Inicia sesión aquí {" "}
+                </span>
+                {" "}
+              </p>
+            ) : (
+              <p>
+                 Crear una cuenta nueva? {" "}
+                <span
+                  onClick={() => setState("Registrarse")}
+                  className="text-primary underline cursor-pointer"
+                >
+                  Regístrate aquí {" "}
+                </span>
+                {" "}
+              </p>
+            )}
           </p>
         ) : (
           <p>
