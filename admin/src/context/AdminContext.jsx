@@ -9,6 +9,9 @@ const AdminContextProvider = (props) => {
     localStorage.getItem("aToken") ? localStorage.getItem("aToken") : ""
   );
   const [doctors, setDoctors] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [dashData, setDashData] = useState(false);
 
@@ -24,6 +27,54 @@ const AdminContextProvider = (props) => {
       if (data.success) {
         setDoctors(data.doctors);
         console.log(data.doctors);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getAllPatients = async () => {
+    try {
+      const { data } = await axios.get(
+        backendUrl + "/api/admin/all-users",
+        { headers: { aToken } }
+      );
+      if (data.success) {
+        setPatients(data.users);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getPatientById = async (id) => {
+    try {
+      const { data } = await axios.get(
+        backendUrl + `/api/admin/user/${id}`,
+        { headers: { aToken } }
+      );
+      if (data.success) {
+        setSelectedPatient(data.user);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getDoctorById = async (id) => {
+    try {
+      const { data } = await axios.get(
+        backendUrl + `/api/admin/doctor/${id}`,
+        { headers: { aToken } }
+      );
+      if (data.success) {
+        setSelectedDoctor(data.doctor);
       } else {
         toast.error(data.message);
       }
@@ -126,6 +177,12 @@ const AdminContextProvider = (props) => {
     backendUrl,
     doctors,
     getAllDoctors,
+    patients,
+    getAllPatients,
+    selectedPatient,
+    getPatientById,
+    selectedDoctor,
+    getDoctorById,
     changeAvailability,
     appointments,
     setAppointments,
@@ -144,3 +201,4 @@ const AdminContextProvider = (props) => {
 };
 
 export default AdminContextProvider;
+

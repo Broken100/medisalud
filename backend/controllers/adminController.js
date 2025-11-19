@@ -120,6 +120,17 @@ const allDoctors = async (req, res) => {
   }
 };
 
+// API to get all users list for admin panel
+const allUsers = async (req, res) => {
+  try {
+    const users = await userModel.find({}).select("-password");
+    res.json({ success: true, users });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 // API to get all appointments list
 const appointmentsAdmin = async (req, res) => {
   try {
@@ -246,4 +257,34 @@ const adminCompleteAppointment = async (req, res) => {
   }
 };
 
-export { addDoctor, loginAdmin, allDoctors, appointmentsAdmin, appointmentCancel, adminDashboard, adminCancelAppointment, adminCompleteAppointment };
+// API to get user by ID
+const getUserById = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.params.id).select("-password");
+    if (user) {
+      res.json({ success: true, user });
+    } else {
+      res.json({ success: false, message: "User not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// API to get doctor by ID
+const getDoctorById = async (req, res) => {
+  try {
+    const doctor = await doctorModel.findById(req.params.id).select("-password");
+    if (doctor) {
+      res.json({ success: true, doctor });
+    } else {
+      res.json({ success: false, message: "Doctor not found" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export { addDoctor, loginAdmin, allDoctors, allUsers, appointmentsAdmin, appointmentCancel, adminDashboard, adminCancelAppointment, adminCompleteAppointment, getUserById, getDoctorById };
